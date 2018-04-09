@@ -51,5 +51,6 @@ other_count = Counter(races[other_index])
 # plot a bar chart of the participants
 plt.bar(["Other", "Amer-Indian", "Asian", "Black", "White"], [other_count[' Other'], indian_count[' Amer-Indian-Eskimo'], asian_count[' Asian-Pac-Islander'], black_count[' Black'], white_count[' White']])
 plt.ylabel("Count")
+plt.xlabel("Participant Race")
 plt.title("Survey Participants by Race")
 plt.show()
