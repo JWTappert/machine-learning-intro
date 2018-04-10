@@ -29,9 +29,9 @@ raw_data = pd.read_csv('adult.data',
                                'native-country',
                                'salary'
                                ])
-print raw_data
+#print raw_data
 
-# get average education level by race
+# get race column
 races = np.array(raw_data['race'])
 
 # get the indexes of each race
@@ -53,4 +53,30 @@ plt.bar(["Other", "Amer-Indian", "Asian", "Black", "White"], [other_count[' Othe
 plt.ylabel("Count")
 plt.xlabel("Participant Race")
 plt.title("Survey Participants by Race")
+plt.show()
+
+
+## average education by age
+
+# create dictionary of education levels
+edu_levels = raw_data[['education','education-num']]
+edu_levels = dict(zip(edu_levels['education-num'], edu_levels['education']))
+# { 1: 'Preschool', 2: '1st-4th' }
+
+# groups raw data by age
+age_grouped = raw_data.groupby('age')
+
+# iterate over groups and get the average education level per group
+ages = []
+edu = []
+for key, item in age_grouped:
+    avg_edu = np.average(item['education-num'])
+    edu.append(int(round(avg_edu)))
+    ages.append(key)
+
+plt.figure(figsize=(12, 8))
+plt.ylabel("Education Level")
+plt.xlabel("Age")
+plt.title("Average education level by age")
+plt.bar(ages, edu)
 plt.show()
