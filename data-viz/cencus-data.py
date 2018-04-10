@@ -71,7 +71,7 @@ ages = []
 edu = []
 for key, item in age_grouped:
     avg_edu = np.average(item['education-num'])
-    edu.append(int(round(avg_edu)))
+    edu.append(avg_edu)
     ages.append(key)
 
 plt.figure(figsize=(12, 8))
