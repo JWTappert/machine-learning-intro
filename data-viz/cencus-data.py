@@ -49,11 +49,12 @@ asian_count = Counter(races[asian_index])
 other_count = Counter(races[other_index])
 
 # plot a bar chart of the participants
+plt.figure(figsize=(12,8))
 plt.bar(["Other", "Amer-Indian", "Asian", "Black", "White"], [other_count[' Other'], indian_count[' Amer-Indian-Eskimo'], asian_count[' Asian-Pac-Islander'], black_count[' Black'], white_count[' White']])
 plt.ylabel("Count")
 plt.xlabel("Participant Race")
 plt.title("Survey Participants by Race")
-plt.show()
+plt.savefig('figure1.png')
 
 
 ## average education by age
@@ -69,6 +70,7 @@ age_grouped = raw_data.groupby('age')
 # iterate over groups and get the average education level per group
 ages = []
 edu = []
+
 for key, item in age_grouped:
     avg_edu = np.average(item['education-num'])
     edu.append(avg_edu)
@@ -79,4 +81,46 @@ plt.ylabel("Education Level")
 plt.xlabel("Age")
 plt.title("Average education level by age")
 plt.bar(ages, edu)
-plt.show()
+plt.savefig('figure2.png')
+
+
+## education level by race
+
+race_grouped = raw_data.groupby('race')
+
+edu = []
+race = []
+
+for key, item in race_grouped:
+    avg_edu = np.average(item['education-num'])
+    edu.append(avg_edu)
+    race.append(key)
+    
+plt.figure(figsize=(12,8))
+plt.ylabel("Education Level")
+plt.xlabel("Race")
+plt.title("Average education by race")
+plt.bar(race, edu)
+plt.savefig('figure3.png')
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
