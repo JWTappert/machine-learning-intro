@@ -54,7 +54,7 @@ plt.bar(["Other", "Amer-Indian", "Asian", "Black", "White"], [other_count[' Othe
 plt.ylabel("Count")
 plt.xlabel("Participant Race")
 plt.title("Survey Participants by Race")
-plt.savefig('figure1.png')
+plt.show()
 
 
 ## average education by age
@@ -62,6 +62,7 @@ plt.savefig('figure1.png')
 # create dictionary of education levels
 edu_levels = raw_data[['education','education-num']]
 edu_levels = dict(zip(edu_levels['education-num'], edu_levels['education']))
+print edu_levels
 # { 1: 'Preschool', 2: '1st-4th' }
 
 # groups raw data by age
@@ -81,7 +82,7 @@ plt.ylabel("Education Level")
 plt.xlabel("Age")
 plt.title("Average education level by age")
 plt.bar(ages, edu)
-plt.savefig('figure2.png')
+plt.show()
 
 
 ## education level by race
@@ -101,7 +102,7 @@ plt.ylabel("Education Level")
 plt.xlabel("Race")
 plt.title("Average education by race")
 plt.bar(race, edu)
-plt.savefig('figure3.png')
+plt.show()
     
 
 
