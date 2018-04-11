@@ -1,15 +1,31 @@
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from collections import Counter
 
-# setup pandas to pretty print data
-pd.set_option('display.height', 1000)
-pd.set_option('display.width', 1000)
-pd.set_option('display.max_rows', 100)
-pd.set_option('display.max_columns', 15)
+from sklearn import datasets
+from sklearn.decomposition import PCA
 
-# read in data from adult.data and give names to each column for easier column access
-raw_data = pd.read_csv('iris.data', delimiter=',', names=['sepal-length','sepal-width','petal-length','petal-width','class'])
+# load the iris dataset from the scikit learn module
+iris_dataset = datasets.load_iris()
 
-print raw_data
+# get septal and petal lengths and widths
+x = iris_dataset.data
+
+# get the classes as numbers i.e. 'setosa': 0 , 'versicolor': 1 , 'virginica': 2
+y = iris_dataset.target
+
+# get class name strings
+names = iris_dataset.target_names
+
+pca = PCA(n_components=2)
+pca.fit(x)
+pca_x = pca.transform(x)
+
+plt.figure()
+colors = ['red', 'green', 'blue']
+lw = 2
+
+for color, i, name in zip(colors, [0, 1, 2], names):
+    plt.scatter(pca_x[y == i, 0], pca_x[y == i, 1], color=color, alpha=.8, lw=lw,
+                label=name)
+plt.legend(loc='best', shadow=False, scatterpoints=1)
+plt.title('PCA of IRIS dataset')
+plt.show()
