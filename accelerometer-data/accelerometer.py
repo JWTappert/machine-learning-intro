@@ -3,11 +3,14 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 import pandas as pd
 
-data = pd.read_csv('3.csv', delimiter=',', names=['id','x','y','z','label'])
+data = pd.read_csv('2.csv', delimiter=',', names=['id','x','y','z','label'])
 
 # simple function to transform the hz to seconds for the x axis labels
 def hzToSeconds(val, pos, hz=52):
     return int(val / hz)
+
+# set axis formatter to our function
+formatter = FuncFormatter(hzToSeconds)
 
 # group the data by activity label
 grpd_data = data.groupby('label')
@@ -18,9 +21,6 @@ index = 1
 act_to_index = {1:"Working at a Computer", 2:"Standing up, Walking and Going up/down Stairs", 3:"Standing", 4:"Walking", 5:"Going up/down Stairs", 6:"Walking and Talking with Someone", 7:"Talking While Standing"}
 
 plt.figure(figsize=(20,40))
-# set axis formatter to our function
-formatter = FuncFormatter(hzToSeconds)
-
 for key, item in grpd_data:
     # get x, y, and z into numpy array and then normalize the data
     xarray = np.array(item['x'])
@@ -48,4 +48,4 @@ for key, item in grpd_data:
     
 
 plt.tight_layout()
-plt.show()
+plt.savefig('2.png')
