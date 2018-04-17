@@ -1,8 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 import pandas as pd
 
 data = pd.read_csv('3.csv', delimiter=',', names=['id','x','y','z','label'])
+
+# simple function to transform the hz to seconds for the x axis labels
+def hzToSeconds(val, pos, hz=52):
+    return int(val / hz)
 
 # group the data by activity label
 grpd_data = data.groupby('label')
@@ -10,9 +15,12 @@ grpd_data = data.groupby('label')
 # create index to correctly subplot the activities
 index = 1
 # dictionary to map index to activity
-act_to_index = {1:"Working at Computer", 2:"Standing up, Walking and going up/down stairs", 3:"Standing", 4:"Walking", 5:"Going up/down Stairs", 6:"Walking and Talking with someone", 7:"Talking While Standing"}
+act_to_index = {1:"Working at a Computer", 2:"Standing up, Walking and Going up/down Stairs", 3:"Standing", 4:"Walking", 5:"Going up/down Stairs", 6:"Walking and Talking with Someone", 7:"Talking While Standing"}
 
-plt.figure(figsize=(20,20))
+plt.figure(figsize=(20,40))
+# set axis formatter to our function
+formatter = FuncFormatter(hzToSeconds)
+
 for key, item in grpd_data:
     # get x, y, and z into numpy array and then normalize the data
     xarray = np.array(item['x'])
@@ -34,6 +42,8 @@ for key, item in grpd_data:
     plt.xlabel("time (s)")
     plt.ylabel("normalized magnitude")
     plt.title(act_to_index[index])
+    ax = plt.gca()
+    ax.xaxis.set_major_formatter(formatter)
     index += 1
     
 
