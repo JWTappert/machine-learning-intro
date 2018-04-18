@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 import pandas as pd
 
-data = pd.read_csv('2.csv', delimiter=',', names=['id','x','y','z','label'])
+data = pd.read_csv('data/1.csv', delimiter=',', names=['id','x','y','z','label'])
 
 # simple function to transform the hz to seconds for the x axis labels
 def hzToSeconds(val, pos, hz=52):
@@ -48,4 +48,4 @@ for key, item in grpd_data:
     
 
 plt.tight_layout()
-plt.savefig('2.png')
+plt.show()
