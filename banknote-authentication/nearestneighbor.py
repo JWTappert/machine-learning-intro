@@ -16,6 +16,11 @@ y = train_data[:,-1]
 knn = KNeighborsClassifier(n_neighbors=3)
 knn.fit(X,y)
 
-# predict the test data
-print(knn.predict(test_data))
-print(knn.predict_proba(test_data))
+# predict the test data and re shape it into a single column
+pred = knn.predict(test_data).reshape(-1,1)
+
+# add the predictions to the test data
+results = np.concatenate((test_data, pred), axis=1)
+
+np.savetxt('tappert_knn.csv', results)
+
