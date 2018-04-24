@@ -22,5 +22,5 @@ pred = knn.predict(test_data).reshape(-1,1)
 # add the predictions to the test data
 results = np.concatenate((test_data, pred), axis=1)
 
-np.savetxt('tappert_knn.csv', results)
+np.savetxt('tappert_knn.csv', results, delimiter=',', fmt='%f')
 
