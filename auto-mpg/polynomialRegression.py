@@ -2,31 +2,46 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics import mean_squared_error, r2_score
 
 # get the train data
 train_data = pd.read_csv('auto-mpg-train.data', delim_whitespace=True, header=None)
 # replace NaN with the mean of that column
 train_data.fillna(train_data.mean(), inplace=True)
+# convert pandas dataframe to numpy array
+train_data = train_data.values
+# remove the string car name from the array
+train_data = train_data[:,:-1]
+# remove the mpg column
+y = train_data[:,0]
+y = y.reshape(-1,1)
+# remove the mpg column from the train data
+X = train_data[:,1:]
+
 
 # get the test data
 test_data = pd.read_csv('auto-mpg-test.data', delim_whitespace=True, header=None)
 # replace NaN with the mean of that column
 test_data.fillna(test_data.mean(), inplace=True)
-
-# convert pandas dataframe to numpy array
-train_data = train_data.values
-# remove the string car name from the array
-train_data = train_data[:,:-1]
 # convert pandas dataframe to numpy array
 test_data = test_data.values
 # remove the string car names from the array
-y = test_data[:,:-1]
+test_data = test_data[:,:-1]
+# get the ids from the test data
+ids = test_data[:,0]
+# remove the id column from the test data
+x = test_data[:,1:]
 
-# Create our Polynomial Features object and fit the data
-# this will allow us to use a polynomial feature set with a linear regression algorithm
-poly = PolynomialFeatures(degree=2)
-X_ = poly.fit_transform(train_data)
 
-clf = LinearRegression()
-clf.fit(X_, y)
+# Create our pieline that will take our data and send it to the polynomial
+# features instance first then the linear regression instance.
+# this will allow us to use a polynomial feature set with a linear regression
+# algorithm
+model = make_pipeline(PolynomialFeatures(degree=2), LinearRegression())
+model.fit(X, y)
 
+pred = model.predict(x).reshape(-1,1)
+
+results = np.column_stack((ids, pred))
+np.savetxt('tappert_poly.csv', results, delimiter=',', fmt='%f')
