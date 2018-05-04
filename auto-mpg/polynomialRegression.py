@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import make_pipeline
-from sklearn.metrics import mean_squared_error, r2_score
 
 # get the train data
 train_data = pd.read_csv('auto-mpg-train.data', delim_whitespace=True, header=None)
@@ -41,7 +40,10 @@ x = test_data[:,1:]
 model = make_pipeline(PolynomialFeatures(degree=2), LinearRegression())
 model.fit(X, y)
 
-pred = model.predict(x).reshape(-1,1)
+# call predict to generate our output
+pred = model.predict(x)
 
+# throw the columns together for the output file
 results = np.column_stack((ids, pred))
+# save to csv
 np.savetxt('tappert_poly.csv', results, delimiter=',', fmt='%f')
