@@ -23,7 +23,16 @@ train_data = pd.concat([red_wine_train, white_wine_train])
 # k folds cross validate to help improve our model
 train, validation = train_test_split(train_data, test_size=0.50, random_state=5)
 
-# strip the class column from our data sets
-y = train[:,-1]
+# get a list of the features
+features = train.columns[:12]
 
-print y
+# convert classes into digits
+train_y = pd.factorize(train['class'])[0]
+valid_y = pd.factorize(validation['class'])[0]
+
+# create our random forest classifier
+clf = RandomForestClassifier()
+
+clf.fit(train[features], train_y)
+
+print clf.score(validation[features], valid_y)
