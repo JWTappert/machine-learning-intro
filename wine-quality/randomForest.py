@@ -12,30 +12,32 @@ red_wine_train = pd.read_csv('wine-quality-red-train.csv', delimiter=';')
 white_wine_train = pd.read_csv('wine-quality-white-train.csv', delimiter=';')
 # get the test data
 test_data = pd.read_csv('wine-quality-test.csv', delimiter=';')
-# drop the ID column
-test_data.drop('ID', axis=1)
-print test_data
+test_data = test_data.drop('ID', axis=1)
 
 # process the data
 
 # add class column to red wine training set
-red_wine_train['class'] = 'red'
+#red_wine_train['class'] = 'red'
 # add class column to white wine training set
-white_wine_train['class'] = 'white'
+#white_wine_train['class'] = 'white'
 # concatenate the two dataframes together
 train_data = pd.concat([red_wine_train, white_wine_train])
 # get the features of the data for indexing
 features = train_data.columns[:12]
 
 # get types and feature data seperated
-type_y = pd.factorize(train_data['class'])[0]
-type_x = train_data[features]
+#type_y = pd.factorize(train_data['class'])[0]
+#type_x = train_data[features]
+
+qual_y = train_data['quality']
+qual_x = train_data.drop('quality', axis=1)
+
 
 # split the data into train and test sets to see how well our model does before actually predicting
-X_train, X_test, y_train, y_test = train_test_split(type_x, type_y, test_size=0.2, random_state=123, stratify=type_y)
+X_train, X_test, y_train, y_test = train_test_split(qual_x, qual_y, test_size=0.2, random_state=123, stratify=qual_y)
 
 # create the pipeline object to feed to the cross validator
-pipeline = make_pipeline(RandomForestClassifier(n_estimators=100))
+pipeline = make_pipeline(preprocessing.StandardScaler(), RandomForestClassifier(n_estimators=100))
 
 # fine tune the paramters for the CV
 hyperparameters = { 'randomforestclassifier__max_features' : ['auto', 'sqrt', 'log2'],
@@ -47,15 +49,17 @@ clf = GridSearchCV(pipeline, hyperparameters, cv=10)
 # train the model with subset of data
 clf.fit(X_train, y_train)
 
-## predict on the test data
-##pred = clf.predict(X_test)
-## print out scores
-#print r2_score(y_test, pred)
-## out: 0.9792664431673053
-#print mean_squared_error(y_test, pred)
-## out: 0.0038498556304138597
+# predict on the test data
+pred = clf.predict(X_test)
+# print out scores
+print r2_score(y_test, pred)
+# quality output: 0.42666289108163247
+# type output: 0.9792664431673053
+print mean_squared_error(y_test, pred)
+# quality output: 0.43888354186718
+# type output: 0.0038498556304138597
 
-type_pred = clf.predict(test_data)
+#type_pred = clf.predict(test_data)
 
 # get the qualities
 #qualities = train_data['quality']
