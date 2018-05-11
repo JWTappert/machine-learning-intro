@@ -12,6 +12,9 @@ red_wine_train = pd.read_csv('wine-quality-red-train.csv', delimiter=';')
 white_wine_train = pd.read_csv('wine-quality-white-train.csv', delimiter=';')
 # get the test data
 test_data = pd.read_csv('wine-quality-test.csv', delimiter=';')
+# drop the ID column
+test_data.drop('ID', axis=1)
+print test_data
 
 # process the data
 
@@ -44,11 +47,37 @@ clf = GridSearchCV(pipeline, hyperparameters, cv=10)
 # train the model with subset of data
 clf.fit(X_train, y_train)
 
-# predict on the test data
-pred = clf.predict(X_test)
-# print out scores
-print r2_score(y_test, pred)
-# out: 0.9792664431673053
-print mean_squared_error(y_test, pred)
-# out: 0.0038498556304138597
+## predict on the test data
+##pred = clf.predict(X_test)
+## print out scores
+#print r2_score(y_test, pred)
+## out: 0.9792664431673053
+#print mean_squared_error(y_test, pred)
+## out: 0.0038498556304138597
 
+type_pred = clf.predict(test_data)
+
+# get the qualities
+#qualities = train_data['quality']
+# get the classes and convert them to digits, i.e. 0 = red 1 = white
+
+
+# classify
+
+# create our random forest classifier
+#clf1 = RandomForestClassifier()
+# classify the type
+#clf1.fit(train_data[features], types)
+#type_pred = clf1.predict(test_data)
+# create new classifier
+#clf2 = RandomForestClassifier()
+## classify the quality
+#clf2.fit(train_data[features], qualities)
+#qual_pred = clf2.predict(test_data)
+
+results = pd.DataFrame(columns=['id','quality','type'])
+#results['quality'] = qual_pred.flatten()
+results['type'] = type_pred.tolist()
+#print type_pred
+
+results.to_csv('tappert.csv', sep=' ')
