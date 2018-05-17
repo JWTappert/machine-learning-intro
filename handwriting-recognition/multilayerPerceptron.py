@@ -17,8 +17,10 @@ x_train = raw_data.iloc[:, :256]
 # split of the classes
 y_train = raw_data.iloc[:, 256:]
 
+# create the pipeline for cross validation
 pipeline = make_pipeline(MLPClassifier())
 
+# setup the hyper params for the cross validation
 hyperparameters = { 'mlpclassifier__hidden_layer_sizes': [(1,), (10,), (20,), (40,), (80,)],
                     'mlpclassifier__activation': ['identity', 'logistic', 'tanh', 'relu'],
                     'mlpclassifier__solver': ['lbfgs', 'sgd', 'adam'],
@@ -33,6 +35,7 @@ clf.fit(x_train, y_train)
 # get the prediction
 pred = clf.predict(test_data)
 
+# create a new dataframe for our results
 results = pd.DataFrame(columns=['id', 'prediction'])
 
 # iterate over the columns
@@ -42,4 +45,5 @@ for i in pred.index:
         results['id'] = i
         if pred[i,j] == 1:
             results['prediction'] = j
-        
+
+results.to_csv('tappert.csv', sep=' ')
