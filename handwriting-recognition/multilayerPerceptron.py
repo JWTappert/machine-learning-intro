@@ -1,3 +1,5 @@
+from sklearn.pipeline import make_pipeline
+from sklearn.model_selection import GridSearchCV
 from sklearn.neural_network import MLPClassifier
 import pandas as pd
 
@@ -15,9 +17,12 @@ x_train = raw_data.iloc[:, :256]
 # split of the classes
 y_train = raw_data.iloc[:, 256:]
 
-# create our classification object
-clf = MLPClassifier()
+pipeline = make_pipeline(MLPClassifier())
 
+# cross validate using the pipeline
+clf = GridSearchCV(pipeline, cv=10)
+# train the model with subset of data
 clf.fit(x_train, y_train)
 
+# get the prediction
 pred = clf.predict(test_data)
