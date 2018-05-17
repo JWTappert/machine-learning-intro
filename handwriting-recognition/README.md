@@ -6,4 +6,4 @@ Starting in Knime I immediately went for a multi layer perceptron learner and pr
 
 The money spot that I used for my multi layer perceptron model was ten folds in my x-partitioner node for cross validation, one-hundred and fix set as the max iterations, one hidden layer, and eighty hidden neurons. These settings resulted in an accuracy of eighty-eight percent in predicting the digit in handwritten images of the digits zero through nine.
 
-![Multi-Layer Perceptron in Knime](multilayerPerceptronStats.PNG)
+![Multi-Layer Perceptron in Knime](multiLayerPerceptronStats.PNG)
