@@ -2,6 +2,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.neural_network import MLPClassifier
 import pandas as pd
+import numpy as np
 
 # get the test data
 raw_test = pd.read_csv('semeion-test.data', delim_whitespace=True, header=None)
@@ -17,19 +18,7 @@ x_train = raw_data.iloc[:, :256]
 # split of the classes
 y_train = raw_data.iloc[:, 256:]
 
-# create the pipeline for cross validation
-pipeline = make_pipeline(MLPClassifier())
-
-# setup the hyper params for the cross validation
-hyperparameters = { 'mlpclassifier__hidden_layer_sizes': [(1,), (10,), (20,), (40,), (80,)],
-                    'mlpclassifier__activation': ['identity', 'logistic', 'tanh', 'relu'],
-                    'mlpclassifier__solver': ['lbfgs', 'sgd', 'adam'],
-                    'mlpclassifier__learning_rate': ['constant', 'invscaling', 'adaptive'],
-                    'mlpclassifier__random_state': [1, 1000, 100000, 1000000, 123456789]}
-
-# cross validate using the pipeline
-clf = GridSearchCV(pipeline, hyperparameters, cv=10)
-# train the model with subset of data
+clf = MLPClassifier()
 clf.fit(x_train, y_train)
 
 # get the prediction
@@ -37,13 +26,15 @@ pred = clf.predict(test_data)
 
 # create a new dataframe for our results
 results = pd.DataFrame(columns=['id', 'prediction'])
+            
+rows = pred.shape[0]
+cols = pred.shape[1]
+pred_array = np.empty((319,1))
 
-# iterate over the columns
-for i in pred.index:
-    # iterate over the rows
-    for j in pred.columns:
-        results['id'] = i
+for i in range(0, rows):
+    for j in range(0, cols):
         if pred[i,j] == 1:
-            results['prediction'] = j
+            pred_array[i] = j
 
+results['prediction'] = pred_array.flatten()
 results.to_csv('tappert.csv', sep=' ')
