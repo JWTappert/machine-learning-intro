@@ -1,8 +1,7 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from keras.datasets import mnist
 from keras.models import Sequential
-from keras.layers import Dense, Dropout
+from keras.layers import Dense
 from keras.utils import np_utils
 
 # seed the random number generator
