@@ -2,7 +2,7 @@ import numpy as np
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
-from keras.layers.convolutional import Convolution2D, MaxPooling2D, Conv2D
+from keras.layers.convolutional import MaxPooling2D, Conv2D
 from keras.utils import np_utils
 
 # seed the random number generator
@@ -25,7 +25,7 @@ num_classes = yp.shape[1]
 
 def CNN_model():
     model = Sequential()
-    model.add(Conv2D(32, (5, 5), data_format='channels_first', border_mode='valid', input_shape=(1, 28, 28), activation='relu'))
+    model.add(Conv2D(32, (5, 5), input_shape=(1, 28, 28), data_format='channels_first'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.2))
     model.add(Flatten())
